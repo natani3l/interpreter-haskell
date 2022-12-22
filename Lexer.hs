@@ -54,7 +54,7 @@ isToken c = elem c "->&|="
 lexer :: String -> [Token]
 lexer [] = []
 lexer ('+' : cs) = TokenAdd : lexer cs
-lexer ('-' : cs) = TokenSub : lexer cs
+-- lexer ('-' : cs) = TokenSub : lexer cs
 lexer ('*' : cs) = TokenMul : lexer cs
 lexer ('/' : cs) = TokenDiv : lexer cs
 lexer ('\\' : cs) = TokenLam : lexer cs

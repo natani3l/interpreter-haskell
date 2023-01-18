@@ -12,6 +12,9 @@ subst x n b@(Var v) =
 subst x n (Lam v t b) = Lam v t (subst x n b)
 subst x n (App e1 e2) = App (subst x n e1) (subst x n e2)
 subst x n (Add e1 e2) = Add (subst x n e1) (subst x n e2)
+subst x n (Mul m1 m2) = Mul (subst x n m1) (subst x n m2)
+subst x n (Sub s1 s2) = Sub (subst x n s1) (subst x n s2)
+subst x n (Div d1 d2) = Div (subst x n d1) (subst x n d2)
 subst x n (And e1 e2) = And (subst x n e1) (subst x n e2)
 subst x n (If e e1 e2) = If (subst x n e) (subst x n e1) (subst x n e2)
 subst x n (Paren e) = Paren (subst x n e)
@@ -37,7 +40,7 @@ stepAdd (Add e1 e2) = case step e1 of
 stepSub :: Expr -> Maybe Expr
 stepSub (Sub (Num s1) (Num s2)) = Just (Num (s1 - s2))
 stepSub (Sub (Num s1) s2) = case step s2 of
-  Just s2' -> Just (Sub (Num s1) s2)
+  Just s2' -> Just (Sub (Num s1) s2')
   _ -> Nothing
 stepSub (Sub s1 s2) = case step s1 of
   Just s1' -> Just (Sub s1' s2)
@@ -46,7 +49,7 @@ stepSub (Sub s1 s2) = case step s1 of
 stepMul :: Expr -> Maybe Expr
 stepMul (Mul (Num m1) (Num m2)) = Just (Num (m1 * m2))
 stepMul (Mul (Num m1) m2) = case step m2 of
-  Just m2' -> Just (Mul (Num m1) m2)
+  Just m2' -> Just (Mul (Num m1) m2')
   _ -> Nothing
 stepMul (Mul m1 m2) = case step m1 of
   Just m1' -> Just (Mul m1' m2)
@@ -55,7 +58,7 @@ stepMul (Mul m1 m2) = case step m1 of
 stepDiv :: Expr -> Maybe Expr
 stepDiv (Div (Num d1) (Num d2)) = Just (Num (d1 `div` d2))
 stepDiv (Div (Num d1) d2) = case step d2 of
-  Just d2' -> Just (Div (Num d1) d2)
+  Just d2' -> Just (Div (Num d1) d2')
   _ -> Nothing
 stepDiv (Div d1 d2) = case step d1 of
   Just d1' -> Just (Div d1' d2)

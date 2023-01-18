@@ -12,7 +12,7 @@ runghc Main.hs < examples/example1.lam
 | Operator | Description |                    |
 | :------: | :---------: | :----------------: |
 |    +     |     Sum     | :heavy_check_mark: |
-|    -     |     Sub     |        :x:         |
+|    -     |     Sub     | :heavy_check_mark: |
 |    \*    |     Mul     | :heavy_check_mark: |
 |    /     |     Div     | :heavy_check_mark: |
 |    ^     |    Expo     |        :x:         |

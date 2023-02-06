@@ -17,6 +17,8 @@ data Expr
   | Mul Expr Expr
   | Div Expr Expr
   | And Expr Expr
+  | Not Expr
+  | Or Expr  Expr
   | If Expr Expr Expr
   | Var String
   | Lam String Ty Expr
@@ -33,7 +35,9 @@ data Token
   | TokenSub
   | TokenMul
   | TokenDiv
+  | TokenNot
   | TokenAnd
+  | TokenOr
   | TokenIf
   | TokenThen
   | TokenElse
@@ -87,6 +91,8 @@ lexKW cs = case span isAlpha cs of
 lexSymbol :: String -> [Token]
 lexSymbol cs = case span isToken cs of
   ("->", rest) -> TokenArrow : lexer rest
+  ("!", rest)  -> TokenNot : lexer rest
   ("&&", rest) -> TokenAnd : lexer rest
+  ("||", rest) -> TokenOr : lexer rest
   ("==", rest) -> TokenEq : lexer rest
   _ -> error "Lexical error: símbolo inválido!"

@@ -18,13 +18,16 @@ data Expr
   | Div Expr Expr
   | And Expr Expr
   | Not Expr
-  | Or Expr  Expr
+  | Or Expr Expr
   | If Expr Expr Expr
   | Var String
   | Lam String Ty Expr
   | App Expr Expr
   | Paren Expr
   | Eq Expr Expr
+  | Gtr Expr Expr
+  | GrOrEq Expr Expr
+  | Less Expr Expr
   deriving (Show, Eq)
 
 data Token
@@ -50,10 +53,13 @@ data Token
   | TokenBoolean
   | TokenNumber
   | TokenEq
+  | TokenGtr
+  | TokenGrOrEq
+  | TokenLess
   deriving (Show)
 
 isToken :: Char -> Bool
-isToken c = elem c "->&|="
+isToken c = elem c "->&|=<"
 
 lexer :: String -> [Token]
 lexer [] = []
@@ -91,8 +97,11 @@ lexKW cs = case span isAlpha cs of
 lexSymbol :: String -> [Token]
 lexSymbol cs = case span isToken cs of
   ("->", rest) -> TokenArrow : lexer rest
-  ("!", rest)  -> TokenNot : lexer rest
+  ("!", rest) -> TokenNot : lexer rest
   ("&&", rest) -> TokenAnd : lexer rest
   ("||", rest) -> TokenOr : lexer rest
   ("==", rest) -> TokenEq : lexer rest
+  (">", rest) -> TokenGtr : lexer rest
+  (">=", rest) -> TokenGrOrEq : lexer rest
+  ("<", rest) -> TokenLess : lexer rest
   _ -> error "Lexical error: símbolo inválido!"

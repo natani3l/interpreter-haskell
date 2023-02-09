@@ -17,7 +17,7 @@ import Lexer
     '!'         { TokenNot }
     '>'         { TokenGtr }
     '>='        { TokenGrOrEq }
-    '<'         { TokenLes }
+    '<'         { TokenLess }
     "&&"        { TokenAnd }
     "||"        { TokenOr }
     "=="        { TokenEq }
@@ -45,7 +45,6 @@ import Lexer
 %left ">="
 %left ">"
 %left "<"
-'
 
 %% 
 
@@ -60,9 +59,9 @@ Exp     : num                        { Num $1 }
         | '!' Exp                    { Not $2 }
         | Exp "&&" Exp               { And $1 $3 }
         | Exp "||" Exp               { Or $1 $3 }
-        | Exp ">=" Exp               { GrtOrEq $1 $3}
-        | Exp ">"  Exp               { Grt $1 $3}
-        | Exp "<"  Exp               { Lesser $1 $3}
+        | Exp '>=' Exp               { GrOrEq $1 $3}
+        | Exp '>'  Exp               { Gtr $1 $3}
+        | Exp '<'  Exp               { Less $1 $3}
         | if Exp then Exp else Exp   { If $2 $4 $6 }
         | '\\' var ':' Type "->" Exp { Lam $2 $4 $6 }
         | Exp Exp                    { App $1 $2 }

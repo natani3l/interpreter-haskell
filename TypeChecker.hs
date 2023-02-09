@@ -25,10 +25,10 @@ typeof ctx (Div d1 d2) = case (typeof ctx d1, typeof ctx d2) of
 typeof ctx (And e1 e2) = case (typeof ctx e1, typeof ctx e2) of
   (Just TBool, Just TBool) -> Just TBool
   _ -> Nothing
-type ctx (Or e1 e2) = case (typeof ctx e1, typeof ctx e2) of
+typeof ctx (Or e1 e2) = case (typeof ctx e1, typeof ctx e2) of
   (Just TBool, Just TBool) -> Just TBool
   _ -> Nothing
-type ctc (Not e1) = case (typeof ctx e1) of
+typeof ctx (Not e1) = case (typeof ctx e1) of
   (Just TBool) -> Just TBool
   _ -> Nothing
 typeof ctx (If e e1 e2) =
@@ -55,6 +55,10 @@ typeof ctx (Eq e1 e2) = case (typeof ctx e1, typeof ctx e2) of
     if t1 == t2
       then Just TBool
       else Nothing
+  _ -> Nothing
+typeof ctx (Less l1 l2) = case (typeof ctx l1, typeof ctx l2) of
+  (Just TNum, Just TNum) -> Just TNum
+  (Just TBool, Just TBool) -> Just TBool
   _ -> Nothing
 typeof ctx (Paren e) = typeof ctx e
 

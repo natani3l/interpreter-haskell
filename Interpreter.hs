@@ -21,6 +21,9 @@ subst x n (Or e1 e2) = Or (subst x n e1) (subst x n e2)
 subst x n (If e e1 e2) = If (subst x n e) (subst x n e1) (subst x n e2)
 subst x n (Paren e) = Paren (subst x n e)
 subst x n (Eq e1 e2) = Eq (subst x n e1) (subst x n e2)
+subst x n (Gtr e1 e2) = Gtr (subst x n e1) (subst x n e2)
+subst x n (GrOrEq e1 e2) = GrOrEq (subst x n e1) (subst x n e2)
+subst x n (Less e1 e2) = Less (subst x n e1) (subst x n e2)
 subst x n e = e
 
 isValue :: Expr -> Bool
@@ -71,19 +74,28 @@ stepDiv (Div d1 d2) = case step d1 of
   Just d1' -> Just (Div d1' d2)
   _ -> Nothing
 
+stepAnd :: Expr -> Maybe Expr
+stepAnd (And BTrue e2) = Just e2
+stepAnd (And BFalse _) = Just BFalse
+stepAnd (And e1 e2) = case step e1 of
+  Just e1' -> Just (And e1' e2)
+  _ -> Nothing
+
+stepOr :: Expr -> Maybe Expr
+stepOr (Or BFalse BFalse) = Just BFalse
+stepOr (Or e1 BFalse) = Just e1
+stepOr (Or BFalse e2) = Just e2
+stepOr (Or e1 e2) = case step e1 of
+  Just e1' -> Just (Or e1' e2)
+  _ -> Nothing
+
 step :: Expr -> Maybe Expr
 step (Add n1 n2) = stepAdd (Add n1 n2)
 step (Sub s1 s2) = stepSub (Sub s1 s2)
 step (Mul m1 m2) = stepMul (Mul m1 m2)
 step (Div d1 d2) = stepDiv (Div d1 d2)
-step (And BTrue e2) = Just e2
-step (And BFalse _) = Just BFalse
-step (And e1 e2) = case step e1 of
-  Just e1' -> Just (And e1' e2)
-  _ -> Nothing
-step (Or BFalse BFalse) = Just BFalse
-step (Or e1 BTrue) = Just BTrue
-step (Or BTrue e2) = Just BTrue
+step (And a1 a2) = stepAnd (And a1 a2)
+step (Or o1 o2) = stepOr (Or o1 o2)
 step (Not BTrue) = Just BFalse
 step (Not BFalse) = Just BTrue
 step (If BTrue e1 _) = Just e1

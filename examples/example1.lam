@@ -1,1 +1,1 @@
-(\x:Number -> x  x) 10
+(\x:Number -> x + x) 10

@@ -39,8 +39,8 @@ import Lexer
 %left '+' '-'
 %left '*' '/'
 %left '!'
-%left '||'
 %left "&&"
+%left "||"
 %left "=="
 %left ">="
 %left ">"

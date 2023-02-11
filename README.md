@@ -1,13 +1,13 @@
 # Interpreter Haskell
 
-# How to run
+## How to run
 
 ```sh
 happy -i Parser.y
 runghc Main.hs < examples/example1.lam
 ```
 
-## Operators
+## Math Operators
 
 | Operator | Description |                    |
 | :------: | :---------: | :----------------: |
@@ -17,11 +17,10 @@ runghc Main.hs < examples/example1.lam
 |    /     |     Div     | :heavy_check_mark: |
 |    ^     |    Expo     |        :x:         |
 
-
-## Relational operators
+## Relational Operators
 
 | Operator | Description              |                    |
-|----------|--------------------------|--------------------|
+| -------- | ------------------------ | ------------------ |
 | >        | Greater than             | :heavy_check_mark: |
 | >=       | Greater than or equal to | :heavy_check_mark: |
 | <        | Less than                | :heavy_check_mark: |

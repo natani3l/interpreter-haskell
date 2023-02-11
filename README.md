@@ -16,3 +16,12 @@ runghc Main.hs < examples/example1.lam
 |    \*    |     Mul     | :heavy_check_mark: |
 |    /     |     Div     | :heavy_check_mark: |
 |    ^     |    Expo     |        :x:         |
+
+
+## Relational operators
+
+| Operator | Description              |                    |
+|----------|--------------------------|--------------------|
+| >        | Greater than             | :heavy_check_mark: |
+| >=       | Greater than or equal to | :heavy_check_mark: |
+| <        | Less than                | :heavy_check_mark: |

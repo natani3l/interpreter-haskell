@@ -60,6 +60,12 @@ typeof ctx (Less l1 l2) = case (typeof ctx l1, typeof ctx l2) of
   (Just TNum, Just TNum) -> Just TNum
   (Just TBool, Just TBool) -> Just TBool
   _ -> Nothing
+typeof ctx (Gtr g1 g2) = case (typeof ctx g1, typeof ctx g2) of
+  (Just TNum, Just TNum) -> Just TNum
+  _ -> Nothing
+typeof ctx (GrOrEq g1 g2) = case (typeof ctx g1, typeof ctx g2) of
+  (Just TNum, Just TNum) -> Just TNum
+  _ -> Nothing
 typeof ctx (Paren e) = typeof ctx e
 
 typecheck :: Expr -> Expr

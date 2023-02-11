@@ -122,6 +122,28 @@ step (Less l1 l2)
   | otherwise = case step l1 of
     Just l1' -> Just (Less l1' l2)
     _ -> Nothing
+step (Gtr g1 g2)
+  | isValue g1 && isValue g2 =
+    if isNumber (g1) > isNumber (g2)
+      then Just BTrue
+      else Just BFalse
+  | isValue g1 = case step g2 of
+    Just g2' -> Just (Gtr g1 g2')
+    _ -> Nothing
+  | otherwise = case step g1 of
+    Just g1' -> Just (Gtr g1' g2)
+    _ -> Nothing
+step (GrOrEq g1 g2)
+  | isValue g1 && isValue g2 =
+    if isNumber (g1) >= isNumber (g2)
+      then Just BTrue
+      else Just BFalse
+  | isValue g1 = case step g2 of
+    Just g2' -> Just (GrOrEq g1 g2')
+    _ -> Nothing
+  | otherwise = case step g1 of
+    Just g1' -> Just (GrOrEq g1' g2)
+    _ -> Nothing
 step e = Just e
 
 eval :: Expr -> Expr

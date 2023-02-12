@@ -103,6 +103,7 @@ step (Not BFalse) = Just BTrue
 step (Not e1) = case step e1 of
   Just e1' -> Just (Not e1')
   _ -> Nothing
+step (Let v1 v2 v3) = Just (subst v1 v2 v3)  
 step (If BTrue e1 _) = Just e1
 step (If BFalse _ e2) = Just e2
 step (If e e1 e2) = case step e of

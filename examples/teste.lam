@@ -1,1 +1,1 @@
-(\x:Number -> let n = 0 in x + 2) 10
+(\x:Number -> let n = 10 in x + 2) 3

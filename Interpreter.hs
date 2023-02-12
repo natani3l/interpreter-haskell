@@ -17,6 +17,7 @@ subst x n (Mul m1 m2) = Mul (subst x n m1) (subst x n m2)
 subst x n (Sub s1 s2) = Sub (subst x n s1) (subst x n s2)
 subst x n (Div d1 d2) = Div (subst x n d1) (subst x n d2)
 subst x n (And e1 e2) = And (subst x n e1) (subst x n e2)
+subst x n (Not e1) = Not (subst x n e1)
 subst x n (Or e1 e2) = Or (subst x n e1) (subst x n e2)
 subst x n (If e e1 e2) = If (subst x n e) (subst x n e1) (subst x n e2)
 subst x n (Paren e) = Paren (subst x n e)
@@ -24,6 +25,7 @@ subst x n (Eq e1 e2) = Eq (subst x n e1) (subst x n e2)
 subst x n (Gtr e1 e2) = Gtr (subst x n e1) (subst x n e2)
 subst x n (GrOrEq e1 e2) = GrOrEq (subst x n e1) (subst x n e2)
 subst x n (Less e1 e2) = Less (subst x n e1) (subst x n e2)
+subst x n (Let v1 v2 v3) = Let v1 (subst x n v2) (subst x n v3)
 subst x n e = e
 
 isValue :: Expr -> Bool
@@ -98,6 +100,9 @@ step (And a1 a2) = stepAnd (And a1 a2)
 step (Or o1 o2) = stepOr (Or o1 o2)
 step (Not BTrue) = Just BFalse
 step (Not BFalse) = Just BTrue
+step (Not e1) = case step e1 of
+  Just e1' -> Just (Not e1')
+  _ -> Nothing
 step (If BTrue e1 _) = Just e1
 step (If BFalse _ e2) = Just e2
 step (If e e1 e2) = case step e of

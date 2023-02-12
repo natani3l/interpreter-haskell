@@ -2,6 +2,7 @@
 
 module TypeChecker where
 
+import Interpreter
 import Lexer
 
 type Ctx = [(String, Ty)]
@@ -30,6 +31,12 @@ typeof ctx (Or e1 e2) = case (typeof ctx e1, typeof ctx e2) of
   _ -> Nothing
 typeof ctx (Not e1) = case (typeof ctx e1) of
   (Just TBool) -> Just TBool
+  _ -> Nothing
+typeof ctx (Let v1 v2 v3) = case (typeof ctx v2, typeof ctx $ subst v1 v2 v3) of
+  (Just e1, Just e2) ->
+    if e1 == e2
+      then Just e1
+      else Nothing
   _ -> Nothing
 typeof ctx (If e e1 e2) =
   case typeof ctx e of

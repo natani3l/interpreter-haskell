@@ -32,6 +32,7 @@ import Lexer
     var         { TokenVar $$ }
     '\\'        { TokenLam }
     ':'         { TokenColon }
+    ','         { TokenComma }
     "->"        { TokenArrow }
     '('         { TokenLParen }
     ')'         { TokenRParen }
@@ -67,9 +68,11 @@ Exp     : num                        { Num $1 }
         | Exp Exp                    { App $1 $2 }
         | '(' Exp ')'                { Paren $2 }
         | Exp "==" Exp               { Eq $1 $3 }
+        | '(' Exp ',' Exp ')'        { Tup $2 $4 }
 
 Type    : Bool                       { TBool }
         | Number                     { TNum }
+        | '(' Type ',' Type ')'      { TTup $2 $4 }
         | '(' Type "->" Type ')'     { TFun $2 $4 }
 
 

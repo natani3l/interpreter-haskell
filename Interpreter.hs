@@ -32,6 +32,7 @@ isValue :: Expr -> Bool
 isValue BTrue = True
 isValue BFalse = True
 isValue (Num _) = True
+isValue (Tup t1 t2) = isValue t1 && isValue t2
 isValue Lam {} = True
 isValue _ = False
 
@@ -39,6 +40,9 @@ isNumber :: Expr -> Int
 isNumber (Num n) = n
 isNumber BTrue = 1
 isNumber BFalse = 0
+
+isTuple :: Expr -> (Expr, Expr)
+isTuple (Tup t1 t2) = (t1, t2)
 
 stepAdd :: Expr -> Maybe Expr
 stepAdd (Add (Num n1) (Num n2)) = Just (Num (n1 + n2))
@@ -162,7 +166,18 @@ step (GrOrEq g1 g2)
   | otherwise = case step g1 of
     Just g1' -> Just (GrOrEq g1' g2)
     _ -> Nothing
+
+step (Tup t1 t2)
+  | isValue t1 && isValue t2 = Just (Tup t1 t2)
+  | isValue t1 = case step t2 of
+    Just t2' -> Just (Tup t1 t2')
+    _ -> Nothing
+  | otherwise = case step t1 of
+    Just t1' -> Just (Tup t1' t2)
+    _ -> Nothing
 step e = Just e
+
+
 
 eval :: Expr -> Expr
 eval e

@@ -5,6 +5,7 @@ import Data.Char
 data Ty
   = TBool
   | TNum
+  | TTup Ty Ty
   | TFun Ty Ty
   deriving (Show, Eq)
 
@@ -29,6 +30,7 @@ data Expr
   | GrOrEq Expr Expr
   | Less Expr Expr
   | Let String Expr Expr
+  | Tup Expr Expr
   deriving (Show, Eq)
 
 data Token
@@ -60,6 +62,8 @@ data Token
   | TokenLet
   | TokenAtt
   | TokenIn
+  | TokenTup
+  | TokenComma
   deriving (Show)
 
 isToken :: Char -> Bool
@@ -76,6 +80,7 @@ lexer ('\\' : cs) = TokenLam : lexer cs
 lexer (':' : cs) = TokenColon : lexer cs
 lexer ('(' : cs) = TokenLParen : lexer cs
 lexer (')' : cs) = TokenRParen : lexer cs
+lexer (',' : cs) = TokenComma : lexer cs
 lexer (c : cs)
   | isSpace c = lexer cs
   | isDigit c = lexNum (c : cs)

@@ -5,7 +5,7 @@ import Data.Char
 data Ty
   = TBool
   | TNum
-  | TTup Ty Ty
+  | TPair Ty Ty
   | TFun Ty Ty
   deriving (Show, Eq)
 
@@ -30,7 +30,9 @@ data Expr
   | GrOrEq Expr Expr
   | Less Expr Expr
   | Let String Expr Expr
-  | Tup Expr Expr
+  | Pair Expr Expr
+  | Fst Expr
+  | Snd Expr
   deriving (Show, Eq)
 
 data Token
@@ -62,8 +64,10 @@ data Token
   | TokenLet
   | TokenAtt
   | TokenIn
-  | TokenTup
+  | TokenPair
   | TokenComma
+  | TokenFst
+  | TokenSnd
   deriving (Show)
 
 isToken :: Char -> Bool
@@ -103,6 +107,9 @@ lexKW cs = case span isAlpha cs of
   ("Number", rest) -> TokenNumber : lexer rest
   ("let", rest) -> TokenLet : lexer rest
   ("in", rest) -> TokenIn : lexer rest
+  ("first", rest) -> TokenFst : lexer rest
+  ("second", rest) -> TokenSnd : lexer rest
+  ("pair", rest) -> TokenPair : lexer rest
   (var, rest) -> TokenVar var : lexer rest
 
 lexSymbol :: String -> [Token]

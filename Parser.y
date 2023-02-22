@@ -38,7 +38,9 @@ import Lexer
     ')'         { TokenRParen }
     Bool        { TokenBoolean }
     Number      { TokenNumber }
-
+    Pair        { TokenPair }
+    first       { TokenFst }
+    second      { TokenSnd }
 %nonassoc if then else
 %left '+' '-'
 %left '*' '/'
@@ -68,11 +70,13 @@ Exp     : num                        { Num $1 }
         | Exp Exp                    { App $1 $2 }
         | '(' Exp ')'                { Paren $2 }
         | Exp "==" Exp               { Eq $1 $3 }
-        | '(' Exp ',' Exp ')'        { Tup $2 $4 }
+        | '(' Exp ',' Exp ')'        { Pair $2 $4 }
+        | first Exp                  { Fst $2 }
+        | second Exp                 { Snd $2 }
 
 Type    : Bool                       { TBool }
         | Number                     { TNum }
-        | '(' Type ',' Type ')'      { TTup $2 $4 }
+        | '(' Type ',' Type ')'      { TPair $2 $4 }
         | '(' Type "->" Type ')'     { TFun $2 $4 }
 
 
